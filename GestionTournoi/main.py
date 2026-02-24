@@ -21,8 +21,8 @@ def addplayer():
 def searchPlayer (tabPlayers, recherche) :
     iRecherche = 0
 
-    while (iRecherche > len(tabPlayers) and tabPlayers[iRecherche])["name"] != recherche:
-        iRecherche =+ 1
+    while iRecherche < len(tabPlayers) and tabPlayers[iRecherche]["name"] != recherche:
+        iRecherche += 1
     return iRecherche
 
 def findplayers (tabPlayers) : 
@@ -35,7 +35,7 @@ def findplayers (tabPlayers) :
     return p1,p2
 
 def findWinner(p1,p2) :
-    winner = random.choice(p1,p2)
+    winner = random.choice([p1,p2])
 
     updateWinner(winner)
 
@@ -48,13 +48,13 @@ def findWinner(p1,p2) :
 
     
 def updateWinner (winner) :
-    winner["score"] =+ 5
-    winner["victoire"] =+ 1
-    winner["match_joues"] =+ 1
+    winner["score"] += 5
+    winner["victoire"] += 1
+    winner["match_joues"] += 1
 
 def lostPlayer (loser) : 
-    loser["defaite"] =+ 1
-    loser["match_joues"] =+ 1
+    loser["defaite"] += 1
+    loser["match_joues"] += 1
 
 def showplayer (tabPlayers,iplayer) :
     return f"nom : {tabPlayers[iplayer]["name"]}\n \
@@ -64,22 +64,25 @@ def showplayer (tabPlayers,iplayer) :
              match_joues : {tabPlayers[iplayer]["match_joues"]}\n"
 
 def tri (tabPlayers) : 
-    for i in range (len(tabPlayers)) :
-        if tabPlayers[i]["score"] < tabPlayers[i +1]["score"] : 
-            temp = tabPlayers[i]
-            tabPlayers[i] = tabPlayers[i + 1]
-            tabPlayers[i + 1] = temp
+    for i in range (len(tabPlayers)-1) :
+        value = tabPlayers[i]
+        for j in range(len(tabPlayers)) :
+            if value["score"] < tabPlayers[i +1]["score"] : 
+                tabPlayers[i] = tabPlayers[j]
+                tabPlayers[j] = value
 
 def showAll (tabPlayers) :
-    tri()
+    tri(tabPlayers)
+    result = []
     for iplayer in range(len(tabPlayers)) :
-         return f"\n\
+        result.append(  f"\n\
              id : {tabPlayers[iplayer]["id"]} \n \
              nom : {tabPlayers[iplayer]["name"]}\n \
              score : {tabPlayers[iplayer]["score"]}\n \
              victoire : {tabPlayers[iplayer]["victoire"]}\n \
              defaite : {tabPlayers[iplayer]["defaite"]}\n \
-             match_joues : {tabPlayers[iplayer]["match_joues"]}\n"
+             match_joues : {tabPlayers[iplayer]["match_joues"]}\n")
+    return result
 
 def main ():
     while True : 
@@ -113,7 +116,15 @@ def main ():
                 else :
                     print (showplayer)
             elif choice == 4 :
-                print(showAll(tabPlayers))
+                result = (showAll(tabPlayers))
+                for iplayer in range(len(result)) :
+                    print(  f"\n\
+                        id : {result[iplayer]["id"]} \n \
+                        nom : {result[iplayer]["name"]}\n \
+                        score : {result[iplayer]["score"]}\n \
+                        victoire : {result[iplayer]["victoire"]}\n \
+                        defaite : {result[iplayer]["defaite"]}\n \
+                        match_joues : {result[iplayer]["match_joues"]}\n")
             elif choice == 5 :
                 print("merci pour cette parti")
             break
