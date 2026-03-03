@@ -15,7 +15,7 @@ def load_file():
     """
     fichier = open('texte.txt','r')
     texte = fichier.read()
-
+    fichier.close()
     return list(texte)
     
 
